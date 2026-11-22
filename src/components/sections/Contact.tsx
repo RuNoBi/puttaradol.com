@@ -16,7 +16,7 @@ export function Contact() {
         Let&apos;s talk.
       </SplitHeading>
       <p className="mb-14 max-w-[46ch] text-lg leading-relaxed text-muted md:mb-20">
-        {profile.status}. The quickest way to reach me is a message on LinkedIn or Instagram.
+        {profile.status}. Email me, or send a message on LinkedIn or Instagram.
       </p>
 
       <Reveal stagger={0.08}>

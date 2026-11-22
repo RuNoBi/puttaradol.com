@@ -60,6 +60,7 @@ const personJsonLd = {
   alternateName: [profile.nickname, "ภัทรดล พงษ์พานิช"],
   url: profile.siteUrl,
   jobTitle: profile.role,
+  email: `mailto:${profile.links.email}`,
   image: `${profile.siteUrl}/images/portrait.png`,
   alumniOf: { "@type": "CollegeOrUniversity", name: education.school },
   address: { "@type": "PostalAddress", addressLocality: "Bangkok", addressCountry: "TH" },

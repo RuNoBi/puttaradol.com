@@ -18,7 +18,7 @@ export const profile = {
   focus: "ELT pipelines · data warehousing · orchestration",
   links: {
     // Leave empty to hide email everywhere on the site.
-    email: "",
+    email: "hello@puttaradol.com",
     github: "https://github.com/RuNoBi",
     linkedin: "https://www.linkedin.com/in/puttaradol/",
     instagram: "https://www.instagram.com/run_ptrd/",
