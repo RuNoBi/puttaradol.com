@@ -1,21 +1,52 @@
 @import "tailwindcss";
 
 /* ── Design tokens ─────────────────────────────────────────────── */
+/* Registered so the whole page can cross-fade between ivory and the dark
+   "showroom" (html.is-dark is toggled while the Work section is on screen). */
+@property --bg { syntax: "<color>"; inherits: true; initial-value: #f4f1ea; }
+@property --surface { syntax: "<color>"; inherits: true; initial-value: #fbfaf6; }
+@property --line { syntax: "<color>"; inherits: true; initial-value: #ddd7cb; }
+@property --text { syntax: "<color>"; inherits: true; initial-value: #0c0c0b; }
+@property --muted { syntax: "<color>"; inherits: true; initial-value: #6f6a61; }
+@property --accent { syntax: "<color>"; inherits: true; initial-value: #b08d57; }
+@property --accent-ink { syntax: "<color>"; inherits: true; initial-value: #87683a; }
+
 :root {
-  --bg: #f7f6f2;
-  --surface: #ffffff;
-  --line: #e4e2dc;
-  --text: #111111;
-  --muted: #6b6a66;
-  --accent: #2b4cff;
+  --bg: #f4f1ea; /* ivory */
+  --surface: #fbfaf6;
+  --line: #ddd7cb;
+  --text: #0c0c0b; /* ink */
+  --muted: #6f6a61;
+  --accent: #b08d57; /* champagne gold — lines, fills, large numbers */
+  --accent-ink: #87683a; /* gold dark enough for small text on ivory */
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-lux: cubic-bezier(0.76, 0, 0.24, 1);
   --gutter: 16px;
+
+  transition:
+    --bg 0.9s var(--ease-lux),
+    --surface 0.9s var(--ease-lux),
+    --line 0.9s var(--ease-lux),
+    --text 0.9s var(--ease-lux),
+    --muted 0.9s var(--ease-lux),
+    --accent 0.9s var(--ease-lux),
+    --accent-ink 0.9s var(--ease-lux);
+}
+
+html.is-dark {
+  --bg: #0c0c0b;
+  --surface: #151513;
+  --line: #2b2925;
+  --text: #f4f1ea;
+  --muted: #9a948a;
+  --accent: #c9a66b;
+  --accent-ink: #c9a66b;
 }
 
 @media (min-width: 768px) {
   :root {
-    --gutter: 24px;
+    --gutter: 32px;
   }
 }
 
@@ -26,25 +57,25 @@
   --color-text: var(--text);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-lux: cubic-bezier(0.76, 0, 0.24, 1);
 
-  --text-display: clamp(3.25rem, 10.5vw, 10rem);
-  --text-display--line-height: 0.88;
-  --text-display--letter-spacing: -0.055em;
-  --text-display--font-weight: 600;
-
-  --text-label: 0.75rem;
+  --text-label: 0.6875rem;
   --text-label--line-height: 1.2;
-  --text-label--letter-spacing: 0.08em;
+  --text-label--letter-spacing: 0.22em;
 }
 
 /* ── Base ──────────────────────────────────────────────────────── */
 html {
   background: var(--bg);
   color-scheme: light;
+}
+html.is-dark {
+  color-scheme: dark;
 }
 
 /* No body background: it would paint over the fixed <DataField> canvas. */
@@ -62,12 +93,44 @@ body {
 }
 
 :focus-visible {
-  outline: 1.5px solid var(--accent);
+  outline: 1px solid var(--accent);
   outline-offset: 3px;
 }
 
 .tnum {
   font-feature-settings: "tnum";
+}
+
+/* Small uppercase label with a gold hairline in front: "— WORK" */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.eyebrow::before {
+  content: "";
+  width: 2.25rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* Infinite ticker */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  animation: marquee 48s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    animation: none;
+  }
 }
 
 /* ── Entrance animation (CSS so the hero paints instantly) ─────── */
@@ -93,8 +156,6 @@ body {
   }
 }
 
-/* ── Intro sequencing (see src/lib/intro.ts) ───────────────────── */
-
 /* ── Flow connectors in architecture diagrams ──────────────────── */
 .flow-x,
 .flow-y {
@@ -106,7 +167,7 @@ body {
   position: absolute;
   background: var(--accent);
   border-radius: 999px;
-  box-shadow: 0 0 8px 1px rgb(43 76 255 / 0.35);
+  box-shadow: 0 0 10px 1px color-mix(in srgb, var(--accent) 60%, transparent);
   animation-duration: 2.2s;
   animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   animation-iteration-count: infinite;

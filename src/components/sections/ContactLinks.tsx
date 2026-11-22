@@ -28,11 +28,11 @@ export function ContactLinks() {
         {items.map((it) => {
           const content = (
             <>
-              <span className="absolute inset-0 origin-left scale-x-0 bg-accent transition-transform duration-700 ease-out-expo group-hover:scale-x-100" />
-              <span className="relative col-span-4 text-label uppercase text-muted transition-colors duration-500 group-hover:text-bg md:col-span-3">
+              <span className="absolute inset-0 origin-left scale-x-0 bg-accent transition-transform duration-700 ease-lux group-hover:scale-x-100" />
+              <span className="relative col-span-4 text-label tracking-[0.22em] text-muted uppercase transition-colors duration-500 group-hover:text-bg md:col-span-3">
                 {it.label}
               </span>
-              <span className="relative col-span-7 text-[clamp(1.4rem,3vw,2.5rem)] leading-none font-medium tracking-[-0.04em] transition-colors duration-500 group-hover:text-bg md:col-span-8">
+              <span className="relative col-span-7 text-[clamp(1.5rem,3.4vw,3rem)] leading-none font-light tracking-[-0.045em] transition-colors duration-500 group-hover:text-bg md:col-span-8">
                 {it.value}
               </span>
               <span className="relative col-span-1 flex justify-end transition-colors duration-500 group-hover:text-bg">

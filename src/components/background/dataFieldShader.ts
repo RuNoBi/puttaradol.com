@@ -127,7 +127,8 @@ export const contourFrag = /* glsl */ `
     col = mix(col, lineCol, alpha);
     col += (hash21(gl_FragCoord.xy + fract(uTime * 7.0) * 100.0) - 0.5) * 0.012;
 
-    col = mix(uBg, col, uVis);
-    gl_FragColor = vec4(col, 1.0);
+    // Transparent outside the hero so the page colour (ivory or the dark
+    // showroom) shows through. Premultiplied alpha.
+    gl_FragColor = vec4(col * uVis, uVis);
   }
 `;

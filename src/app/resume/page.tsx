@@ -16,7 +16,7 @@ const site = profile.siteUrl.replace("https://", "");
 /** One-page résumé generated from the same content as the site. Print → PDF. */
 export default function Resume() {
   return (
-    <div className="resume mx-auto max-w-[1440px] px-[var(--gutter)] pt-28 pb-20 md:pt-36">
+    <div className="resume mx-auto max-w-[1600px] px-[var(--gutter)] pt-28 pb-20 md:pt-36">
       <div className="no-print mb-10 flex flex-wrap items-center justify-between gap-4">
         <p className="text-label uppercase text-muted">Résumé — always in sync with this site</p>
         <PrintButton />

@@ -4,13 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
+import { TextRoll } from "@/components/motion/TextRoll";
 import { profile } from "@/content/profile";
 
 const items = [
   { id: "work", label: "Work" },
   { id: "about", label: "About" },
   { id: "experience", label: "Experience" },
-  { id: "stack", label: "Stack" },
+  { id: "stack", label: "Skills" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -73,38 +74,39 @@ export function Nav() {
             scrolled && !menu ? "border-line bg-bg/92" : "border-transparent"
           }`}
         />
-        <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-[var(--gutter)] py-4 text-sm">
-          <Link href="/" className="font-medium tracking-tight" onClick={() => setMenu(false)}>
-            {profile.name.toLowerCase()}
-            <span className="text-muted">.com</span>
+        <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-[var(--gutter)] py-4 text-sm">
+          <Link
+            href="/"
+            className="text-[0.8rem] font-normal tracking-[0.32em] uppercase"
+            onClick={() => setMenu(false)}
+          >
+            {profile.name}
           </Link>
 
-          <ul className="hidden items-center gap-1 md:flex">
+          <ul className="hidden items-center gap-7 md:flex">
             {items.map((item) => (
               <li key={item.id}>
                 <a
                   href={href(item.id)}
-                  className={`relative rounded-full px-3 py-1.5 transition-colors ${
+                  className={`group relative flex items-center gap-2 text-label tracking-[0.22em] uppercase transition-colors duration-500 ${
                     active === item.id ? "text-text" : "text-muted hover:text-text"
                   }`}
                 >
-                  {active === item.id && (
-                    <motion.span
-                      layoutId="nav-active"
-                      className="absolute inset-0 rounded-full bg-surface ring-1 ring-line"
-                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                    />
-                  )}
-                  <span className="relative">{item.label}</span>
+                  <span
+                    className={`size-1 rounded-full bg-accent transition-transform duration-500 ease-lux ${
+                      active === item.id ? "scale-100" : "scale-0"
+                    }`}
+                  />
+                  <TextRoll>{item.label}</TextRoll>
                 </a>
               </li>
             ))}
-            <li className="ml-3">
+            <li className="ml-2">
               <Link
                 href="/resume"
-                className="rounded-full bg-text px-4 py-2 font-medium text-bg transition-colors hover:bg-accent"
+                className="group inline-flex rounded-full border border-text/20 px-5 py-2.5 text-label tracking-[0.22em] uppercase transition-colors duration-500 hover:border-accent hover:bg-accent hover:text-bg"
               >
-                Résumé
+                <TextRoll>Résumé</TextRoll>
               </Link>
             </li>
           </ul>
@@ -116,7 +118,7 @@ export function Nav() {
             aria-label={menu ? "Close menu" : "Open menu"}
             onClick={() => setMenu((m) => !m)}
           >
-            <span className="text-label uppercase">{menu ? "Close" : "Menu"}</span>
+            <span className="text-label tracking-[0.22em] uppercase">{menu ? "Close" : "Menu"}</span>
           </button>
         </nav>
       </motion.header>
@@ -141,7 +143,7 @@ export function Nav() {
                     animate={{ y: "0%" }}
                     exit={{ y: "100%" }}
                     transition={{ duration: 0.7, delay: 0.15 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex items-baseline justify-between py-4 text-[2.6rem] leading-none font-medium tracking-[-0.045em]"
+                    className="flex items-baseline justify-between py-4 text-[2.8rem] leading-none font-light tracking-[-0.045em]"
                   >
                     {item.label}
                     <span className="tnum text-label text-muted">0{i + 1}</span>

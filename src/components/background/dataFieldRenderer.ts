@@ -20,7 +20,8 @@ export function createDataField(
   canvas: HTMLCanvasElement,
   { reducedMotion }: { reducedMotion: boolean },
 ): DataFieldHandle {
-  const renderer = new WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: "low-power" });
+  const renderer = new WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "low-power" });
+  renderer.setClearColor(0x000000, 0);
   const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
   const quad = new PlaneGeometry(2, 2);
 
@@ -33,9 +34,9 @@ export function createDataField(
     uMouse: { value: new Vector2(-9999, -9999) },
     uMouseOn: { value: 0 },
     uClick: { value: new Vector3(0, 0, -1) },
-    uBg: { value: srgb("#f7f6f2") },
-    uLine: { value: srgb("#111111") },
-    uAccent: { value: srgb("#2b4cff") },
+    uBg: { value: srgb("#f4f1ea") },
+    uLine: { value: srgb("#0c0c0b") },
+    uAccent: { value: srgb("#b08d57") },
     uVis: { value: 1 },
   };
   const material = new ShaderMaterial({

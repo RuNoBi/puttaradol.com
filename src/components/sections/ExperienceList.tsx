@@ -25,9 +25,9 @@ export function ExperienceList({ roles }: { roles: Role[] }) {
               onClick={() => setOpen(isOpen ? null : i)}
               className="group grid w-full grid-cols-12 items-baseline gap-x-4 md:gap-x-6 gap-y-2 py-8 text-left md:py-10"
             >
-              <span className="tnum col-span-12 text-label uppercase text-muted md:col-span-2">{r.period}</span>
+              <span className="tnum col-span-12 text-label tracking-[0.22em] text-muted uppercase md:col-span-2">{r.period}</span>
               <span className="col-span-10 flex flex-col gap-1 md:col-span-6">
-                <span className="text-[clamp(1.5rem,3vw,2.5rem)] leading-[1.05] font-medium tracking-[-0.04em] transition-colors group-hover:text-accent">
+                <span className="text-[clamp(1.8rem,3.4vw,3.25rem)] leading-[1] font-light tracking-[-0.045em] transition-colors duration-500 group-hover:text-accent">
                   {r.company}
                 </span>
                 <span className="text-muted">{r.title}</span>
@@ -61,11 +61,11 @@ export function ExperienceList({ roles }: { roles: Role[] }) {
                 >
                   <div className="grid grid-cols-12 gap-x-4 md:gap-x-6 gap-y-6 pb-10">
                     <div className="col-span-12 flex flex-col gap-6 md:col-span-6 md:col-start-3">
-                      <p className="text-lg leading-snug tracking-[-0.01em]">{r.summary}</p>
+                      <p className="text-xl leading-snug font-light tracking-[-0.02em]">{r.summary}</p>
                       <ul className="flex flex-col gap-3">
                         {r.points.map((pt) => (
                           <li key={pt} className="grid grid-cols-[1.25rem_1fr] text-[0.95rem] leading-relaxed text-muted">
-                            <span className="text-accent">→</span>
+                            <span className="text-accent">—</span>
                             <span>{pt}</span>
                           </li>
                         ))}
