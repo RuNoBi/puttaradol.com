@@ -1,26 +1,208 @@
 @import "tailwindcss";
 
+/* ── Design tokens ─────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --line: #e4e2dc;
+  --text: #111111;
+  --muted: #6b6a66;
+  --accent: #2b4cff;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --gutter: 16px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (min-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --gutter: 24px;
   }
 }
 
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --text-display: clamp(3.25rem, 10.5vw, 10rem);
+  --text-display--line-height: 0.88;
+  --text-display--letter-spacing: -0.055em;
+  --text-display--font-weight: 600;
+
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.2;
+  --text-label--letter-spacing: 0.08em;
+}
+
+/* ── Base ──────────────────────────────────────────────────────── */
+html {
+  background: var(--bg);
+  color-scheme: light;
+}
+
+/* No body background: it would paint over the fixed <DataField> canvas. */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.tnum {
+  font-feature-settings: "tnum";
+}
+
+/* ── Entrance animation (CSS so the hero paints instantly) ─────── */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.9s var(--ease-out-expo) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 80ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+/* ── Intro sequencing (see src/lib/intro.ts) ───────────────────── */
+
+/* ── Flow connectors in architecture diagrams ──────────────────── */
+.flow-x,
+.flow-y {
+  overflow: hidden;
+}
+.flow-x::after,
+.flow-y::after {
+  content: "";
+  position: absolute;
+  background: var(--accent);
+  border-radius: 999px;
+  box-shadow: 0 0 8px 1px rgb(43 76 255 / 0.35);
+  animation-duration: 2.2s;
+  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  animation-iteration-count: infinite;
+  animation-delay: var(--d, 0s);
+}
+.flow-x::after {
+  top: -1.5px;
+  left: 0;
+  width: 18px;
+  height: 4px;
+  animation-name: flow-x;
+}
+.flow-y::after {
+  left: -1.5px;
+  top: 0;
+  width: 4px;
+  height: 14px;
+  animation-name: flow-y;
+}
+/* translate % is relative to the dot, so the connector length is read from
+   a container query unit instead. */
+.flow-x {
+  container-type: inline-size;
+}
+@keyframes flow-x {
+  from {
+    transform: translateX(-20px);
+  }
+  to {
+    transform: translateX(calc(100cqw + 20px));
+  }
+}
+@keyframes flow-y {
+  from {
+    transform: translateY(-16px);
+  }
+  to {
+    transform: translateY(56px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-x::after,
+  .flow-y::after {
+    animation: none;
+    display: none;
+  }
+}
+
+/* ── Print: the résumé page becomes a clean black-on-white A4 ──── */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  .site-header,
+  .site-footer,
+  canvas,
+  .no-print,
+  a[href="#main"] {
+    display: none !important;
+  }
+  .resume {
+    padding: 0 !important;
+    max-width: none !important;
+  }
+  .resume-sheet {
+    border: 0 !important;
+    background: none !important;
+    padding: 0 !important;
+    max-width: none !important;
+    border-radius: 0 !important;
+    font-size: 11.5px;
+  }
+  .resume-sheet h1 {
+    font-size: 26px !important;
+  }
+  .resume-sheet section {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    break-inside: avoid;
+  }
+  .resume-sheet .text-muted,
+  .resume-sheet [class*="text-muted"] {
+    color: #555 !important;
+  }
+  .resume-sheet [class*="border-line"] {
+    border-color: #ddd !important;
+  }
+}
+
+/* Revealed by GSAP once split into letters. */
+.split-pending {
+  visibility: hidden;
 }

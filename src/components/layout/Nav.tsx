@@ -1,0 +1,165 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
+import { profile } from "@/content/profile";
+
+const items = [
+  { id: "work", label: "Work" },
+  { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
+  { id: "stack", label: "Stack" },
+  { id: "contact", label: "Contact" },
+];
+
+export function Nav() {
+  const pathname = usePathname();
+  const onHome = pathname === "/";
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menu, setMenu] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
+  const { scrollY } = useScroll();
+
+  // Hide when scrolling down, reveal when scrolling up.
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    setScrolled(y > 40);
+    setHidden(y > 240 && y > prev && !menu);
+  });
+
+  // Highlight the section in view (home page only).
+  useEffect(() => {
+    if (!onHome) return;
+    const els = items.map((i) => document.getElementById(i.id)).filter(Boolean) as HTMLElement[];
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setActive(e.target.id);
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [onHome]);
+
+  // Lock scroll while the mobile menu is open.
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    const lenis = (window as unknown as { __lenis?: { stop(): void; start(): void } }).__lenis;
+    if (menu) {
+      wasOpen.current = true;
+      document.documentElement.style.overflow = "hidden";
+      lenis?.stop();
+    } else if (wasOpen.current) {
+      wasOpen.current = false;
+      document.documentElement.style.overflow = "";
+      lenis?.start();
+    }
+  }, [menu]);
+
+  const href = (id: string) => (onHome ? `#${id}` : `/#${id}`);
+
+  return (
+    <>
+      <motion.header
+        animate={{ y: hidden ? "-110%" : "0%" }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="site-header fixed inset-x-0 top-0 z-50"
+      >
+        <div
+          className={`absolute inset-0 -z-10 border-b transition-colors duration-500 ${
+            scrolled && !menu ? "border-line bg-bg/92" : "border-transparent"
+          }`}
+        />
+        <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-[var(--gutter)] py-4 text-sm">
+          <Link href="/" className="font-medium tracking-tight" onClick={() => setMenu(false)}>
+            {profile.name.toLowerCase()}
+            <span className="text-muted">.com</span>
+          </Link>
+
+          <ul className="hidden items-center gap-1 md:flex">
+            {items.map((item) => (
+              <li key={item.id}>
+                <a
+                  href={href(item.id)}
+                  className={`relative rounded-full px-3 py-1.5 transition-colors ${
+                    active === item.id ? "text-text" : "text-muted hover:text-text"
+                  }`}
+                >
+                  {active === item.id && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-0 rounded-full bg-surface ring-1 ring-line"
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                  <span className="relative">{item.label}</span>
+                </a>
+              </li>
+            ))}
+            <li className="ml-3">
+              <Link
+                href="/resume"
+                className="rounded-full bg-text px-4 py-2 font-medium text-bg transition-colors hover:bg-accent"
+              >
+                Résumé
+              </Link>
+            </li>
+          </ul>
+
+          <button
+            type="button"
+            className="relative flex h-9 w-14 items-center justify-end md:hidden"
+            aria-expanded={menu}
+            aria-label={menu ? "Close menu" : "Open menu"}
+            onClick={() => setMenu((m) => !m)}
+          >
+            <span className="text-label uppercase">{menu ? "Close" : "Menu"}</span>
+          </button>
+        </nav>
+      </motion.header>
+
+      <AnimatePresence>
+        {menu && (
+          <motion.div
+            key="menu"
+            initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
+            animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+            exit={{ clipPath: "inset(0% 0% 100% 0%)" }}
+            transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-40 flex flex-col justify-end bg-bg px-[var(--gutter)] pt-24 pb-10 md:hidden"
+          >
+            <ul className="flex flex-col">
+              {[...items, { id: "resume", label: "Résumé" }].map((item, i) => (
+                <li key={item.id} className="overflow-hidden border-b border-line">
+                  <motion.a
+                    href={item.id === "resume" ? "/resume" : href(item.id)}
+                    onClick={() => setMenu(false)}
+                    initial={{ y: "100%" }}
+                    animate={{ y: "0%" }}
+                    exit={{ y: "100%" }}
+                    transition={{ duration: 0.7, delay: 0.15 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex items-baseline justify-between py-4 text-[2.6rem] leading-none font-medium tracking-[-0.045em]"
+                  >
+                    {item.label}
+                    <span className="tnum text-label text-muted">0{i + 1}</span>
+                  </motion.a>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8 flex gap-6 text-sm text-muted">
+              <a href={profile.links.linkedin} target="_blank" rel="noreferrer">
+                LinkedIn
+              </a>
+              <a href={profile.links.github} target="_blank" rel="noreferrer">
+                GitHub
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
