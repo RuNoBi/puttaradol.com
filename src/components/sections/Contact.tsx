@@ -18,6 +18,19 @@ export function Contact() {
         </p>
       </div>
 
+      <Reveal className="mb-14 grid grid-cols-1 gap-px overflow-hidden rounded-[1.5rem] border border-line bg-line sm:grid-cols-3 md:mb-20">
+        {[
+          ["Looking for", profile.availability.label],
+          ["When", profile.availability.period],
+          ["Details", profile.availability.detail],
+        ].map(([k, v]) => (
+          <div key={k} data-reveal className="flex flex-col gap-2 bg-bg p-6">
+            <span className="text-label tracking-[0.22em] text-muted uppercase">{k}</span>
+            <span className="text-lg font-light tracking-[-0.02em]">{v}</span>
+          </div>
+        ))}
+      </Reveal>
+
       <Reveal stagger={0.08}>
         <ContactLinks />
       </Reveal>

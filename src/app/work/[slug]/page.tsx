@@ -136,6 +136,24 @@ async function CaseStudy({ params }: { params: Promise<{ slug: string }> }) {
         </Reveal>
       </section>
 
+      {/* Engineering practices */}
+      {p.practices && (
+        <section className="mt-28 grid grid-cols-12 gap-x-4 gap-y-8 md:mt-40 md:gap-x-6">
+          <div className="col-span-12 flex flex-col gap-3 md:col-span-3">
+            <h2 className="text-label tracking-[0.22em] uppercase text-muted">Built to last</h2>
+            <p className="max-w-[24ch] text-sm text-muted">How the platform is run, deployed and handed over.</p>
+          </div>
+          <Reveal as="ul" className="col-span-12 grid gap-px overflow-hidden rounded-[1.5rem] border border-line bg-line sm:grid-cols-2 md:col-span-9">
+            {p.practices.map((x) => (
+              <li key={x} data-reveal className="flex gap-4 bg-bg p-6 leading-relaxed">
+                <span className="mt-2.5 h-px w-5 shrink-0 bg-accent" />
+                <span>{x}</span>
+              </li>
+            ))}
+          </Reveal>
+        </section>
+      )}
+
       {/* Stack + links */}
       <section className="mt-28 grid grid-cols-12 gap-x-4 md:gap-x-6 gap-y-8 md:mt-40">
         <h2 className="col-span-12 text-label tracking-[0.22em] uppercase text-muted md:col-span-3">Stack</h2>

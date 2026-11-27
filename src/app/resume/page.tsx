@@ -29,6 +29,9 @@ export default function Resume() {
             <p className="mt-3 text-lg text-muted">
               {profile.role} · {education.field}, {education.school}
             </p>
+            <p className="mt-2 text-sm">
+              Seeking: {profile.availability.label} · {profile.availability.period}
+            </p>
           </div>
           <ul className="flex flex-col gap-1 text-sm text-muted md:text-right">
             <li>{profile.location.replace(", TH", ", Thailand")}</li>

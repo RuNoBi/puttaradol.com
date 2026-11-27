@@ -20,6 +20,8 @@ export type Project = {
   overview: string;
   problem: string;
   built: string[];
+  /** Engineering practices — only what the public repo/README shows. */
+  practices?: string[];
   results: { value: string; label: string }[];
   architecture: DiagramStage[];
 };
@@ -48,6 +50,14 @@ export const projects: Project[] = [
       "Automated orchestration with pipeline monitoring and failure alerts, to improve reliability and cut manual intervention.",
       "Developed self-service data marts where users can search, preview, download and access data through APIs for downstream analytics.",
       "Packaged the platform as a reproducible Docker bootstrap — environment templates, deployment scripts, health checks and documented setup for dev, staging and production.",
+    ],
+    practices: [
+      "Every component — warehouse, Airbyte, Airflow, dbt and CKAN — runs as its own Docker Compose stack on a shared network, so each can be started, upgraded or rolled back independently.",
+      "Separate dev, staging and production environment templates; secrets are generated per machine and never committed.",
+      "One-command first boot (bootstrap → build → start → health check), plus daily start/stop scripts that keep data volumes intact.",
+      "A smoke-test health check that can be pointed at any host after a deploy.",
+      "Operations docs for the people who run it next: getting started, deploy checklist, hand-off template and rollback procedures.",
+      "Versioned, tagged infrastructure releases.",
     ],
     results: [
       { value: "~10 min → 0.1–3 s", label: "Data retrieval time after the redesign" },

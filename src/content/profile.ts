@@ -9,7 +9,13 @@ export const profile = {
   headline: "I build pipelines that turn scattered data into something people can actually use.",
   summary:
     "Year-3 Computer Engineering & Digital Technology student at Chulalongkorn University, with two data engineering internships behind me — at UBE Group and CP Axtra.",
-  status: "Open to internships",
+  status: "Available for a co-op internship",
+  /** Shown to recruiters in the hero, contact section and résumé. */
+  availability: {
+    label: "Data Engineering co-op",
+    period: "May – Jul 2027",
+    detail: "Year 4, Term 1 · Bangkok · on-site or hybrid",
+  },
   location: "Bangkok, TH",
   timezone: "Asia/Bangkok",
   siteUrl: "https://puttaradol.com",

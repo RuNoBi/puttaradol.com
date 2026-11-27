@@ -24,7 +24,7 @@ export function Hero() {
             <p className="eyebrow">{profile.role} — Bangkok</p>
             <p className="inline-flex items-center gap-2 text-sm text-muted">
               <span className="size-1.5 rounded-full bg-accent shadow-[0_0_0_4px_color-mix(in_srgb,var(--accent)_20%,transparent)]" />
-              {profile.status}
+              {profile.availability.label} · {profile.availability.period}
             </p>
           </div>
 
