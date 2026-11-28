@@ -35,10 +35,10 @@ export const profile = {
 
 /** Big numbers for the About section. Every figure comes from real work. */
 export const stats = [
-  { value: "2", label: "Data engineering internships", detail: "UBE Group · CP Axtra" },
-  { value: "700K+", label: "Complaint records processed", detail: "City Issue Breach Predictor" },
-  { value: "0.1–3 s", label: "Data retrieval, down from ~10 min", detail: "UBE warehouse & marts" },
-  { value: "5", label: "ML models trained & compared", detail: "SLA breach prediction" },
+  { key: "internships", value: "2", label: "Data engineering internships", detail: "UBE Group · CP Axtra" },
+  { key: "records_processed", value: "700K+", label: "Complaint records processed", detail: "City Issue Breach Predictor" },
+  { key: "query_latency", value: "0.1–3 s", label: "Data retrieval, down from ~10 min", detail: "UBE warehouse & marts" },
+  { key: "models_compared", value: "5", label: "ML models trained & compared", detail: "SLA breach prediction" },
 ] as const;
 
 /** "How I work" — pipeline stages with the tools actually used at each. */

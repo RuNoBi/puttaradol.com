@@ -20,26 +20,26 @@ export default async function Image() {
           width: "100%",
           height: "100%",
           display: "flex",
-          background: "#f7f6f2",
-          color: "#111111",
+          background: "#0e1012",
+          color: "#e6e9ec",
           fontFamily: "Inter",
           position: "relative",
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 64, width: 760 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 22, color: "#6b6a66" }}>
-            <div style={{ width: 10, height: 10, borderRadius: 10, background: "#2b4cff" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 22, color: "#8a929a" }}>
+            <div style={{ width: 10, height: 10, borderRadius: 10, background: "#62d2c0" }} />
             {profile.siteUrl.replace("https://", "")}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <div style={{ fontSize: 112, fontWeight: 600, letterSpacing: -6, lineHeight: 0.9 }}>{profile.name}</div>
-            <div style={{ display: "flex", fontSize: 34, color: "#6b6a66", letterSpacing: -1 }}>
+            <div style={{ display: "flex", fontSize: 34, color: "#8a929a", letterSpacing: -1 }}>
               {`${profile.role} · Chulalongkorn University`}
             </div>
           </div>
-          <div style={{ display: "flex", gap: 14, fontSize: 22, color: "#6b6a66" }}>
+          <div style={{ display: "flex", gap: 14, fontSize: 22, color: "#8a929a" }}>
             {["Airflow", "dbt", "PySpark", "Databricks", "SQL"].map((t) => (
-              <div key={t} style={{ display: "flex", border: "1px solid #dcd9d2", borderRadius: 999, padding: "8px 18px" }}>
+              <div key={t} style={{ display: "flex", border: "1px solid #262a2f", borderRadius: 999, padding: "8px 18px" }}>
                 {t}
               </div>
             ))}
@@ -59,7 +59,7 @@ export default async function Image() {
             bottom: 0,
             width: 480,
             height: 260,
-            background: "linear-gradient(to bottom, rgba(247,246,242,0), #f7f6f2)",
+            background: "linear-gradient(to bottom, rgba(14,16,18,0), #0e1012)",
           }}
         />
       </div>

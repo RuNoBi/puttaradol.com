@@ -75,11 +75,11 @@ export function Showroom({ projects }: { projects: Project[] }) {
         <div data-track className="flex flex-col lg:h-full lg:w-max lg:flex-row">
           {/* Opening panel */}
           <div className="flex shrink-0 flex-col justify-end px-[var(--gutter)] pt-28 pb-16 lg:h-full lg:w-[58vw] lg:justify-center lg:pb-0">
-            <p className="eyebrow mb-10">I — Selected work</p>
+            <p className="eyebrow mb-10">01 — Selected work</p>
             <h2 className="text-[clamp(3rem,8vw,8.5rem)] leading-[0.88] font-light tracking-[-0.05em]">
-              The
+              Things
               <br />
-              collection.
+              I&apos;ve built.
             </h2>
             <p className="mt-10 max-w-[34ch] text-lg leading-relaxed text-muted">
               Four projects, one at a time — from a production ELT platform to cloud pipelines and a model that
@@ -109,7 +109,7 @@ export function Showroom({ projects }: { projects: Project[] }) {
               <div className="relative grid w-full grid-cols-12 items-center gap-x-6 gap-y-14">
                 <div className="col-span-12 flex flex-col gap-8 lg:col-span-5">
                   <p data-rise className="eyebrow">
-                    Model 0{i + 1} — {p.kind}
+                    Case 0{i + 1} — {p.kind}
                   </p>
                   <h3
                     data-rise

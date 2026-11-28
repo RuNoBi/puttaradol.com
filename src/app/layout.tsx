@@ -7,8 +7,6 @@ import { Nav } from "@/components/layout/Nav";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { education } from "@/content/experience";
 import { profile } from "@/content/profile";
-import { introBootScript } from "@/lib/intro";
-import { Calibration } from "@/components/layout/Calibration";
 import "./globals.css";
 
 const inter = Inter({
@@ -56,8 +54,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f4f1ea",
-  colorScheme: "light",
+  themeColor: "#0e1012",
+  colorScheme: "dark",
 };
 
 const personJsonLd = {
@@ -93,7 +91,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: introBootScript }} />
         <noscript>
           <style>{`.split-pending{visibility:visible}`}</style>
         </noscript>
@@ -111,7 +108,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <span id="top" aria-hidden className="absolute top-0" />
         <DataField />
-        <Calibration />
         <SmoothScroll />
         <Nav />
         <main id="main">{children}</main>

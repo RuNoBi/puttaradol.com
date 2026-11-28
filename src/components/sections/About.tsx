@@ -15,7 +15,7 @@ const facts = [
 export function About() {
   return (
     <Section id="about">
-      <SectionHeader label="III — About" title={<>Hi, I&apos;m {profile.nickname}.</>} />
+      <SectionHeader label="03 — About" title={<>Hi, I&apos;m {profile.nickname}.</>} />
 
       <div className="grid grid-cols-12 gap-x-4 gap-y-16 md:gap-x-6">
         <Reveal className="col-span-12 flex flex-col gap-8 lg:col-span-6">

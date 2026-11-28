@@ -1,47 +1,19 @@
 @import "tailwindcss";
 
 /* ── Design tokens ─────────────────────────────────────────────── */
-/* Registered so the whole page can cross-fade between ivory and the dark
-   "showroom" (html.is-dark is toggled while the Work section is on screen). */
-@property --bg { syntax: "<color>"; inherits: true; initial-value: #f4f1ea; }
-@property --surface { syntax: "<color>"; inherits: true; initial-value: #fbfaf6; }
-@property --line { syntax: "<color>"; inherits: true; initial-value: #ddd7cb; }
-@property --text { syntax: "<color>"; inherits: true; initial-value: #0c0c0b; }
-@property --muted { syntax: "<color>"; inherits: true; initial-value: #6f6a61; }
-@property --accent { syntax: "<color>"; inherits: true; initial-value: #b08d57; }
-@property --accent-ink { syntax: "<color>"; inherits: true; initial-value: #87683a; }
-
+/* Moody graphite with a single cool "signal" accent. */
 :root {
-  --bg: #f4f1ea; /* ivory */
-  --surface: #fbfaf6;
-  --line: #ddd7cb;
-  --text: #0c0c0b; /* ink */
-  --muted: #6f6a61;
-  --accent: #b08d57; /* champagne gold — lines, fills, large numbers */
-  --accent-ink: #87683a; /* gold dark enough for small text on ivory */
+  --bg: #0e1012; /* graphite */
+  --surface: #15181b;
+  --line: #262a2f;
+  --text: #e6e9ec;
+  --muted: #8a929a;
+  --accent: #62d2c0; /* signal teal — lines, highlights, data */
+  --accent-ink: #62d2c0;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-lux: cubic-bezier(0.76, 0, 0.24, 1);
   --gutter: 16px;
-
-  transition:
-    --bg 0.9s var(--ease-lux),
-    --surface 0.9s var(--ease-lux),
-    --line 0.9s var(--ease-lux),
-    --text 0.9s var(--ease-lux),
-    --muted 0.9s var(--ease-lux),
-    --accent 0.9s var(--ease-lux),
-    --accent-ink 0.9s var(--ease-lux);
-}
-
-html.is-dark {
-  --bg: #0c0c0b;
-  --surface: #151513;
-  --line: #2b2925;
-  --text: #f4f1ea;
-  --muted: #9a948a;
-  --accent: #c9a66b;
-  --accent-ink: #c9a66b;
 }
 
 @media (min-width: 768px) {
@@ -72,9 +44,6 @@ html.is-dark {
 /* ── Base ──────────────────────────────────────────────────────── */
 html {
   background: var(--bg);
-  color-scheme: light;
-}
-html.is-dark {
   color-scheme: dark;
 }
 
@@ -116,21 +85,6 @@ body {
   width: 2.25rem;
   height: 1px;
   background: var(--accent);
-}
-
-/* Watch bezel: one slow revolution every two minutes */
-@keyframes bezel-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.bezel-spin {
-  animation: bezel-spin 120s linear infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .bezel-spin {
-    animation: none;
-  }
 }
 
 /* Infinite ticker */
@@ -244,7 +198,6 @@ body {
   }
   .site-header,
   .site-footer,
-  .boot-loader,
   canvas,
   .no-print,
   a[href="#main"] {
@@ -292,20 +245,6 @@ body {
   .resume-sheet [class*="border-line"] {
     border-color: #ddd !important;
   }
-}
-
-/* ── Calibration intro (see Calibration.tsx / src/lib/intro.ts) ─── */
-.boot-loader {
-  display: none;
-}
-html.is-loading .boot-loader {
-  display: flex;
-}
-html.is-loading .rise {
-  animation-play-state: paused;
-}
-html.is-loading {
-  overflow: hidden;
 }
 
 /* Revealed by GSAP once split into letters. */

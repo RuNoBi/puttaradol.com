@@ -7,7 +7,7 @@ import { certifications, education, experience } from "@/content/experience";
 export function Experience() {
   return (
     <Section id="experience">
-      <SectionHeader label="V — Experience" title="Where I've worked." />
+      <SectionHeader label="05 — Experience" title="Where I've worked." />
 
       <Reveal stagger={0.12}>
         <ExperienceList roles={experience} />

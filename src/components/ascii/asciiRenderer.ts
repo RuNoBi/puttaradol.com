@@ -117,10 +117,8 @@ export async function createAsciiPortrait(
       uGlyphs: { value: ramp.length },
       uTime: { value: 0 },
       uIntro: { value: opts.reducedMotion ? 1 : 0 },
-      uDevelop: { value: opts.reducedMotion ? 1 : 0 },
-      uPaper: { value: srgb("#f4f1ea") },
-      uDim: { value: srgb("#aaa397") },
-      uFg: { value: srgb("#0c0c0b") },
+      uDim: { value: srgb("#3a4047") },
+      uFg: { value: srgb("#e6e9ec") },
     },
     transparent: true,
     depthTest: false,
@@ -198,14 +196,12 @@ export async function createAsciiPortrait(
 
     asciiMat.uniforms.uTime.value = t;
     asciiMat.uniforms.uIntro.value = Math.min(1, t / 1.6);
-    // After the ASCII builds in, the photograph develops out of it.
-    asciiMat.uniforms.uDevelop.value = Math.min(1, Math.max(0, (t - 1.5) / 1.7));
     if (start === Infinity) return; // waiting for play()
 
     // Real pointer, or a short idle sweep over the face (4s every 12s) to hint
     // that the portrait is interactive.
     const idleFor = now - pointer.last;
-    const inSweepWindow = t > 4.5 && (t - 4.5) % 14 < 3;
+    const inSweepWindow = t > 2.4 && (t - 2.4) % 12 < 4;
     const autoSweep = inSweepWindow && (isTouch ? idleFor > 2500 : !interacted);
     let mx = -10;
     let my = -10;
@@ -213,9 +209,9 @@ export async function createAsciiPortrait(
     if (pointer.inside) {
       mx = pointer.x;
       my = pointer.y;
-      strength = 0.07 * k;
+      strength = 0.045 * k;
     } else if (autoSweep) {
-      const s = t - 4.5;
+      const s = t - 2.4;
       mx = 0.5 + Math.sin(s * 1.6) * 0.22;
       my = 0.66 + Math.sin(s * 2.3) * 0.12;
       strength = 0.04 * k;

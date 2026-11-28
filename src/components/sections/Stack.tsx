@@ -27,7 +27,7 @@ export function Stack() {
       </div>
 
       <Section id="stack">
-        <SectionHeader label="VI — Skills" title="Tools I've used in real work." />
+        <SectionHeader label="06 — Skills" title="Tools I've used in real work." />
 
         <Reveal className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((c) => (

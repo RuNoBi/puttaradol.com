@@ -7,7 +7,7 @@ import { pipeline } from "@/content/profile";
 export function Pipeline() {
   return (
     <Section id="process">
-      <SectionHeader label="IV — Process" title="From raw data to something useful, in five steps." />
+      <SectionHeader label="04 — Process" title="From raw data to something useful, in five steps." />
 
       <Reveal as="ol" stagger={0.08} className="border-t border-line">
         {pipeline.map((s, i) => (

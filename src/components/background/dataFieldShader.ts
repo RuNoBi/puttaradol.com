@@ -118,12 +118,12 @@ export const contourFrag = /* glsl */ `
     float appear = smoothstep(fromCentre - 0.25, fromCentre, uIntro);
 
     float near = exp(-d2 / (300.0 * 300.0)) * uMouseOn;
-    float alpha = (mix(0.07, 0.13, major) + near * 0.35 + ripple * 0.45) * line * appear;
+    float alpha = (mix(0.06, 0.12, major) + near * 0.4 + ripple * 0.5) * line * appear;
     vec3 lineCol = mix(uLine, uAccent, clamp(near * 1.2 + ripple, 0.0, 1.0));
 
     vec3 col = uBg;
     // A faint wash of accent on the "peaks" and under the cursor.
-    col = mix(col, uAccent, (0.025 * smoothstep(0.3, 0.95, h) + 0.03 * near) * appear);
+    col = mix(col, uAccent, (0.03 * smoothstep(0.3, 0.95, h) + 0.05 * near) * appear);
     col = mix(col, lineCol, alpha);
     col += (hash21(gl_FragCoord.xy + fract(uTime * 7.0) * 100.0) - 0.5) * 0.012;
 

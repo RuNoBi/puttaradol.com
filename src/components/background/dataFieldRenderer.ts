@@ -34,9 +34,9 @@ export function createDataField(
     uMouse: { value: new Vector2(-9999, -9999) },
     uMouseOn: { value: 0 },
     uClick: { value: new Vector3(0, 0, -1) },
-    uBg: { value: srgb("#f4f1ea") },
-    uLine: { value: srgb("#0c0c0b") },
-    uAccent: { value: srgb("#b08d57") },
+    uBg: { value: srgb("#0e1012") },
+    uLine: { value: srgb("#e6e9ec") },
+    uAccent: { value: srgb("#62d2c0") },
     uVis: { value: 1 },
   };
   const material = new ShaderMaterial({
