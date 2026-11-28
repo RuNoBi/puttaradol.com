@@ -117,7 +117,7 @@ export function Precision() {
           <div className="col-span-5 col-start-8">
             <p className="eyebrow mb-10">II — Precision</p>
             <div className="relative h-[22rem]">
-              {stats.map((s, i) => (
+              {stats.map((s) => (
                 <div key={s.label} data-stat className="absolute inset-0 flex flex-col justify-center gap-6">
                   <span className="text-label tracking-[0.22em] text-muted uppercase">
                     {s.detail}
