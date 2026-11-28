@@ -43,8 +43,8 @@ export const asciiFrag = /* glsl */ `
   uniform float uGlyphs;    // number of glyphs in the atlas
   uniform float uTime;
   uniform float uIntro;     // 0 → 1 build-in
-  uniform vec3  uDim;       // colour of the faintest glyphs
-  uniform vec3  uFg;        // colour of the brightest glyphs
+  uniform vec3  uShadow;    // duotone dark
+  uniform vec3  uHigh;      // duotone light
 
   float luma(vec3 c) { return dot(c, vec3(0.299, 0.587, 0.114)); }
 
@@ -54,64 +54,59 @@ export const asciiFrag = /* glsl */ `
     return fract(p.x * p.y);
   }
 
+  // Duotone data portrait: a softened photo tinted graphite → pale teal,
+  // with ASCII characters carved into it. Reads as a face from a distance,
+  // as data up close; the cursor brings out the real colours.
   void main() {
     vec2 px   = gl_FragCoord.xy;
+    vec2 uv   = px / uRes;
     vec2 cell = floor(px / uCell);
     vec2 cuv  = (cell + 0.5) * uCell / uRes;
 
-    vec4 img = texture2D(uPortrait, cuv);          // one sample per cell
-    vec4 photo = texture2D(uPortrait, px / uRes);  // per pixel, for the glow
-    if (img.a < 0.02 && photo.a < 0.02) discard;
+    vec4 img   = texture2D(uPortrait, cuv);        // one sample per cell → glyph choice
+    vec4 photo = texture2D(uPortrait, uv, 1.3);    // softened (mip bias) photo
+    if (photo.a < 0.02 && img.a < 0.02) discard;
 
-    // Light on dark: brighter pixels get denser, brighter glyphs.
+    // Glyph density from brightness, boosted on edges.
     float l = pow(smoothstep(0.04, 0.92, luma(img.rgb)), 0.72);
-
-    // Edge detection at cell scale — outlines hair, eyes, brows, jaw.
     vec2 o = uCell / uRes;
     float gx = luma(texture2D(uPortrait, cuv + vec2(o.x, 0.0)).rgb) - luma(texture2D(uPortrait, cuv - vec2(o.x, 0.0)).rgb);
     float gy = luma(texture2D(uPortrait, cuv + vec2(0.0, o.y)).rgb) - luma(texture2D(uPortrait, cuv - vec2(0.0, o.y)).rgb);
-    float edge = smoothstep(0.08, 0.45, length(vec2(gx, gy)));
-    l = max(l, edge * 0.85);
+    l = max(l, smoothstep(0.08, 0.45, length(vec2(gx, gy))) * 0.85);
 
     float reveal = smoothstep(0.0, 1.0, texture2D(uTrail, cuv).r);
 
-    // Build-in: cells appear top → bottom with jitter.
+    // Build-in: cells resolve top → bottom with jitter.
     float h = hash(cell);
     float order = h * 0.35 + (1.0 - cuv.y) * 0.65;
-    float appear = smoothstep(order, order + 0.06, uIntro * 1.06);
+    float appear = smoothstep(order, order + 0.08, uIntro * 1.08);
 
     float maxG = uGlyphs - 1.0;
-    float g = floor(mix(1.0, maxG, l) + reveal * 2.0 + 0.5);
-
-    // "Decoding" flicker on the leading edge of the reveal and during build-in.
+    float g = floor(mix(1.0, maxG, l) + 0.5);
     float tick = floor(uTime * 14.0);
     float front = step(0.06, reveal) * (1.0 - step(0.3, reveal));
     float building = step(0.001, appear) * (1.0 - step(0.999, appear));
-    if (max(front, building) > 0.5 && hash(cell + tick) > 0.78) {
+    if (max(front, building) > 0.5 && hash(cell + tick) > 0.75) {
       g = 1.0 + floor(hash(cell * 1.7 + tick) * maxG);
     }
     g = clamp(g, 1.0, maxG);
-
     vec2 local = fract(px / uCell);
     float glyph = texture2D(uAtlas, vec2((g + local.x) / uGlyphs, local.y)).r;
 
-    // Monochrome by default; the cursor slowly brings out the real colours.
-    vec3 mono  = mix(uDim, uFg, smoothstep(0.0, 0.85, l));
-    vec3 color = pow(img.rgb, vec3(0.85)) * 1.1;
-    color = mix(vec3(luma(color)), color, 1.3);
-    vec3 col = mix(mono, color, reveal);
+    // Duotone base, real colour where revealed.
+    float lp = smoothstep(0.03, 0.95, luma(photo.rgb));
+    vec3 duo = mix(uShadow, uHigh, lp);
+    vec3 real = pow(photo.rgb, vec3(0.95)) * 1.04;
+    vec3 base = mix(duo, real, reveal);
 
-    // Fade the shoulders/shirt out toward the bottom so the face leads.
-    float fade = smoothstep(0.2, 0.58, cuv.y);
-    float a = glyph * smoothstep(0.02, 0.5, img.a) * appear * fade;
+    // Characters carve the image: brighter inside glyphs, dimmer between.
+    float carve = mix(0.62, 1.12, glyph);
+    vec3 col = base * carve;
 
-    // Faint glow of the photo underneath, so the face reads at a glance.
-    float glow = smoothstep(0.1, 0.95, luma(photo.rgb)) * 0.13 * photo.a
-               * smoothstep(0.2, 0.58, px.y / uRes.y) * smoothstep(0.3, 1.0, uIntro);
-    vec3 glowCol = mix(uFg, photo.rgb, reveal);
+    // Soft vignette: dissolve shoulders and sides so the face leads.
+    float fade = smoothstep(0.18, 0.56, uv.y) * smoothstep(0.0, 0.14, uv.x) * smoothstep(1.0, 0.86, uv.x);
+    float a = photo.a * fade * appear;
 
-    vec3 outCol = col * a + glowCol * glow * (1.0 - a);
-    float outA = a + glow * (1.0 - a);
-    gl_FragColor = vec4(outCol, outA);
+    gl_FragColor = vec4(col * a, a);
   }
 `;
