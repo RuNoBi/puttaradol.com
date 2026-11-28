@@ -22,7 +22,8 @@ export function HeroScroll({ children }: { children: ReactNode }) {
         tl.to("[data-hero-copy]", { yPercent: -35, opacity: 0, duration: 0.6 }, 0)
           .to("[data-hero-portrait]", { scale: 0.86, yPercent: 8, opacity: 0.15, transformOrigin: "50% 30%" }, 0)
           .to("[data-hero-name]", { yPercent: -60 }, 0)
-          .to("[data-hero-meta]", { opacity: 0, duration: 0.3 }, 0);
+          .to("[data-hero-meta]", { opacity: 0, duration: 0.3 }, 0)
+          .to("[data-hero-bezel]", { rotate: 120, ease: "none" }, 0);
       });
       return () => mm.revert();
     },

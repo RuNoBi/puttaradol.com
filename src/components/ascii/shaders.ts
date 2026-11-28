@@ -43,6 +43,8 @@ export const asciiFrag = /* glsl */ `
   uniform float uGlyphs;    // number of glyphs in the atlas
   uniform float uTime;
   uniform float uIntro;     // 0 → 1 build-in
+  uniform float uDevelop;   // 0 → 1 photo "develops" out of the ASCII
+  uniform vec3  uPaper;     // page colour — photo whites are printed onto it
   uniform vec3  uDim;
   uniform vec3  uFg;
 
@@ -83,15 +85,23 @@ export const asciiFrag = /* glsl */ `
     float order = h * 0.35 + (1.0 - cuv.y) * 0.65;
     float appear = smoothstep(order, order + 0.06, uIntro * 1.06);
 
-    // Glyph index: darker = denser. Revealed cells get a little denser too.
-    float maxG = uGlyphs - 1.0;
-    float g = floor(mix(1.0, maxG, l) + reveal * 2.0 + 0.5);
+    // Photo development: each cell flips from glyph to photo at its own
+    // moment (top → bottom with jitter). The cursor trail turns cells back
+    // into data.
+    float thr = hash(cell * 0.73) * 0.55 + (1.0 - cuv.y) * 0.45;
+    float dev = smoothstep(thr, thr + 0.12, uDevelop * 1.12);
+    float toData = smoothstep(0.05, 0.5, reveal);
+    float photoAmt = dev * (1.0 - toData);
 
-    // "Decoding" flicker on the leading edge of the reveal and during build-in.
+    // Glyph index: darker = denser.
+    float maxG = uGlyphs - 1.0;
+    float g = floor(mix(1.0, maxG, l) + 0.5);
+
+    // "Decoding" flicker wherever a cell is mid-transition.
     float tick = floor(uTime * 14.0);
-    float front = step(0.06, reveal) * (1.0 - step(0.3, reveal));
+    float front = step(0.02, photoAmt) * (1.0 - step(0.98, photoAmt)) + step(0.04, reveal) * (1.0 - step(0.3, reveal));
     float building = step(0.001, appear) * (1.0 - step(0.999, appear));
-    if (max(front, building) > 0.5 && hash(cell + tick) > 0.78) {
+    if (max(front, building) > 0.5 && hash(cell + tick) > 0.7) {
       g = 1.0 + floor(hash(cell * 1.7 + tick) * maxG);
     }
     g = clamp(g, 1.0, maxG);
@@ -99,10 +109,7 @@ export const asciiFrag = /* glsl */ `
     vec2 local = fract(px / uCell);
     float glyph = texture2D(uAtlas, vec2((g + local.x) / uGlyphs, local.y)).r;
 
-    vec3 mono  = mix(uDim, uFg, smoothstep(0.0, 0.8, l));
-    vec3 color = img.rgb * 0.82;                 // a touch darker so it reads on paper
-    color = mix(vec3(luma(color)), color, 1.35); // slight saturation boost
-    vec3 col   = mix(mono, color, reveal);
+    vec3 col = mix(uDim, uFg, smoothstep(0.0, 0.8, l));
 
     // Fade the shoulders/shirt out toward the bottom so the face leads and
     // the name overlapping the portrait stays readable.
@@ -110,17 +117,24 @@ export const asciiFrag = /* glsl */ `
     float a = glyph * smoothstep(0.02, 0.5, img.a) * appear * fade;
     a *= smoothstep(0.03, 0.12, l); // near-white areas (the shirt) stay blank paper
 
-    // Soft pencil shading underneath, so the face is recognisable at a glance:
-    // only the darker parts of the photo add ink (white shirt stays paper).
-    // Where the cursor reveals, it becomes a soft wash of the real colours.
+    // Soft pencil shading under the glyphs (data layer only).
     float shade = 1.0 - smoothstep(0.08, 0.95, luma(photo.rgb));
-    vec3 underCol = mix(uFg, photo.rgb, reveal);
-    float under = mix(shade * 0.3, 0.45, reveal) * photo.a
-                * smoothstep(0.04, 0.5, px.y / uRes.y) * smoothstep(0.3, 1.0, uIntro);
+    float under = shade * 0.3 * photo.a * smoothstep(0.04, 0.5, px.y / uRes.y) * smoothstep(0.3, 1.0, uIntro);
+    vec3 dataCol = col * a + uFg * under * (1.0 - a);
+    float dataA = a + under * (1.0 - a);
 
-    // Glyph ink over the underlay (premultiplied alpha).
-    vec3 outCol = col * a + underCol * under * (1.0 - a);
-    float outA = a + under * (1.0 - a);
+    // The photograph: per pixel, gently graded, faded at the shoulders.
+    vec3 p = photo.rgb;
+    p = mix(vec3(luma(p)), p, 0.9);                      // slightly muted, editorial
+    p = clamp((p - 0.5) * 1.06 + 0.5, 0.0, 1.0);         // a touch of contrast
+    p *= uPaper;                                          // whites become ivory paper
+    vec2 uv = px / uRes;
+    float pa = photo.a
+             * smoothstep(0.06, 0.45, uv.y)               // dissolve the shoulders
+             * smoothstep(0.0, 0.16, uv.x) * smoothstep(1.0, 0.84, uv.x);
+
+    vec3 outCol = mix(dataCol, p * pa, photoAmt);
+    float outA = mix(dataA, pa, photoAmt);
     gl_FragColor = vec4(outCol, outA);
   }
 `;

@@ -118,6 +118,21 @@ body {
   background: var(--accent);
 }
 
+/* Watch bezel: one slow revolution every two minutes */
+@keyframes bezel-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.bezel-spin {
+  animation: bezel-spin 120s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bezel-spin {
+    animation: none;
+  }
+}
+
 /* Infinite ticker */
 @keyframes marquee {
   to {
@@ -229,6 +244,7 @@ body {
   }
   .site-header,
   .site-footer,
+  .boot-loader,
   canvas,
   .no-print,
   a[href="#main"] {
@@ -276,6 +292,20 @@ body {
   .resume-sheet [class*="border-line"] {
     border-color: #ddd !important;
   }
+}
+
+/* ── Calibration intro (see Calibration.tsx / src/lib/intro.ts) ─── */
+.boot-loader {
+  display: none;
+}
+html.is-loading .boot-loader {
+  display: flex;
+}
+html.is-loading .rise {
+  animation-play-state: paused;
+}
+html.is-loading {
+  overflow: hidden;
 }
 
 /* Revealed by GSAP once split into letters. */

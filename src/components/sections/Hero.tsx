@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { AsciiPortrait } from "@/components/ascii/AsciiPortrait";
+import { Bezel } from "@/components/ascii/Bezel";
 import { LocalTime } from "@/components/layout/LocalTime";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { SplitName } from "@/components/motion/SplitName";
@@ -69,14 +70,28 @@ export function Hero() {
           className="mx-auto mt-14 w-full max-w-[380px] md:absolute md:top-24 md:right-[var(--gutter)] md:mt-0 md:h-[calc(100dvh-10rem)] md:w-auto md:max-w-[50vw]"
         >
           <figcaption className="mb-3 text-right text-label tracking-[0.22em] text-muted uppercase">
-            <span className="hidden sm:inline">Hover the portrait</span>
-            <span className="sm:hidden">Drag across the portrait</span>
+            <span className="hidden sm:inline">Hover to see the data behind the face</span>
+            <span className="sm:hidden">Drag to see the data</span>
           </figcaption>
-          <AsciiPortrait
-            src="/images/portrait.png"
-            alt={`ASCII portrait of ${profile.name}`}
-            className="md:h-[calc(100%-1.75rem)] md:w-auto"
-          />
+          <div className="relative md:h-[calc(100%-1.75rem)]">
+            {/* Arch frame + watch bezel behind the portrait */}
+            <div
+              aria-hidden
+              className="absolute inset-x-[3%] top-[1%] bottom-[10%] rounded-t-[999px] border border-line bg-gradient-to-b from-surface/80 to-transparent"
+            />
+            <div
+              data-hero-bezel
+              aria-hidden
+              className="absolute top-[33%] left-1/2 aspect-square w-[90%] -translate-x-1/2 -translate-y-1/2"
+            >
+              <Bezel className="size-full" />
+            </div>
+            <AsciiPortrait
+              src="/images/portrait-hd.webp"
+              alt={`Portrait of ${profile.fullName}`}
+              className="relative md:h-full md:w-auto"
+            />
+          </div>
         </figure>
 
         {/* Name — thin, wide, overlapping the faded bottom of the portrait */}

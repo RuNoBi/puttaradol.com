@@ -5,7 +5,7 @@ import { Experience } from "@/components/sections/Experience";
 import { Hero } from "@/components/sections/Hero";
 import { Pipeline } from "@/components/sections/Pipeline";
 import { Showroom } from "@/components/sections/Showroom";
-import { Specs } from "@/components/sections/Specs";
+import { Precision } from "@/components/sections/Precision";
 import { Stack } from "@/components/sections/Stack";
 import { projects } from "@/content/projects";
 
@@ -17,7 +17,7 @@ export default function Home() {
       <DarkZone id="work">
         <Showroom projects={projects} />
       </DarkZone>
-      <Specs />
+      <Precision />
       <About />
       <Pipeline />
       <Experience />

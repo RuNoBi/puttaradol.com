@@ -19,6 +19,8 @@ export const profile = {
   location: "Bangkok, TH",
   timezone: "Asia/Bangkok",
   siteUrl: "https://puttaradol.com",
+  /** Google Search Console HTML-tag verification code (content="…"), if used. */
+  googleVerification: "" as string,
   university: "Chulalongkorn University",
   program: "B.Eng. Computer Engineering & Digital Technology (CEDT)",
   focus: "ELT pipelines · data warehousing · orchestration",

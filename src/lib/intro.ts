@@ -1,6 +1,7 @@
-// Optional first-load gate: while <html> has `is-loading`, entrance animations
-// wait. Nothing sets the class right now (the boot loader was removed), so
-// onIntroDone() simply runs immediately.
+// First-load gate: while <html> has `is-loading`, the calibration intro is on
+// screen and entrance animations wait. The inline script below adds the class
+// on the first visit of a session (skipped for reduced motion), with a safety
+// timeout so the page can never stay hidden.
 
 export const INTRO_EVENT = "intro:done";
 export const INTRO_SEEN_KEY = "intro-seen";
@@ -27,3 +28,12 @@ export function onIntroDone(fn: () => void) {
   window.addEventListener(INTRO_EVENT, fn, { once: true });
   return () => window.removeEventListener(INTRO_EVENT, fn);
 }
+
+/** Inline <head> script — runs before first paint. */
+export const introBootScript = `(function(){try{
+var d=document.documentElement;
+if(sessionStorage.getItem('${INTRO_SEEN_KEY}'))return;
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+d.classList.add('is-loading');
+setTimeout(function(){if(d.classList.contains('is-loading')){d.classList.remove('is-loading');window.dispatchEvent(new Event('${INTRO_EVENT}'));}},6000);
+}catch(e){}})();`;

@@ -7,7 +7,7 @@ import { profile } from "@/content/profile";
 export function Contact() {
   return (
     <Section id="contact" className="pb-10 md:pb-14">
-      <p className="eyebrow mb-12 md:mb-16">Contact</p>
+      <p className="eyebrow mb-12 md:mb-16">VII — Contact</p>
 
       <div className="mb-16 grid grid-cols-12 items-end gap-x-6 gap-y-8 md:mb-24">
         <SplitHeading className="col-span-12 text-[clamp(3.5rem,10vw,10rem)] leading-[0.86] font-extralight tracking-[-0.06em] lg:col-span-8">

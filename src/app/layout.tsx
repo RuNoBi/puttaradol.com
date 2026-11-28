@@ -7,6 +7,8 @@ import { Nav } from "@/components/layout/Nav";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { education } from "@/content/experience";
 import { profile } from "@/content/profile";
+import { introBootScript } from "@/lib/intro";
+import { Calibration } from "@/components/layout/Calibration";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,7 +18,7 @@ const inter = Inter({
 });
 
 const title = `${profile.fullName} — ${profile.role}`;
-const description = `${profile.role} portfolio of ${profile.fullName} (${profile.nickname}). ${profile.summary}`;
+const description = `Puttaradol Pongpanich (Run) — Data Engineer from Bangkok. ${profile.summary} Projects, experience and résumé.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
@@ -25,7 +27,9 @@ export const metadata: Metadata = {
   applicationName: profile.fullName,
   authors: [{ name: profile.fullName, url: profile.siteUrl }],
   keywords: [
+    "Puttaradol",
     "Puttaradol Pongpanich",
+    "ภัทรดล พงษ์พานิช",
     "Data Engineer",
     "Data Engineering",
     "Chulalongkorn University",
@@ -46,39 +50,56 @@ export const metadata: Metadata = {
     locale: "en_US",
   },
   twitter: { card: "summary_large_image", title, description },
-  robots: { index: true, follow: true },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
+  // Paste the code from Google Search Console here (or verify by DNS instead).
+  verification: profile.googleVerification ? { google: profile.googleVerification } : undefined,
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f7f6f2",
+  themeColor: "#f4f1ea",
   colorScheme: "light",
 };
 
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": `${profile.siteUrl}/#person`,
   name: profile.fullName,
+  givenName: "Puttaradol",
+  familyName: "Pongpanich",
+  description: profile.summary,
   alternateName: [profile.nickname, "ภัทรดล พงษ์พานิช"],
   url: profile.siteUrl,
   jobTitle: profile.role,
   email: `mailto:${profile.links.email}`,
-  image: `${profile.siteUrl}/images/portrait.png`,
+  image: `${profile.siteUrl}/images/portrait-hd.webp`,
   alumniOf: { "@type": "CollegeOrUniversity", name: education.school },
   address: { "@type": "PostalAddress", addressLocality: "Bangkok", addressCountry: "TH" },
   knowsAbout: ["Data Engineering", "ETL/ELT", "Data Warehousing", "Apache Airflow", "dbt", "PySpark", "Databricks", "SQL", "Python"],
   sameAs: [profile.links.linkedin, profile.links.github, profile.links.instagram],
 };
 
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${profile.siteUrl}/#website`,
+  name: "Puttaradol",
+  alternateName: ["Puttaradol Pongpanich", "puttaradol.com"],
+  url: profile.siteUrl,
+  author: { "@id": `${profile.siteUrl}/#person` },
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: introBootScript }} />
         <noscript>
           <style>{`.split-pending{visibility:visible}`}</style>
         </noscript>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c") }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([personJsonLd, websiteJsonLd]).replace(/</g, "\\u003c") }}
         />
       </head>
       <body className="min-h-dvh">
@@ -90,6 +111,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <span id="top" aria-hidden className="absolute top-0" />
         <DataField />
+        <Calibration />
         <SmoothScroll />
         <Nav />
         <main id="main">{children}</main>

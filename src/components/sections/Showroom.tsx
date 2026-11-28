@@ -75,7 +75,7 @@ export function Showroom({ projects }: { projects: Project[] }) {
         <div data-track className="flex flex-col lg:h-full lg:w-max lg:flex-row">
           {/* Opening panel */}
           <div className="flex shrink-0 flex-col justify-end px-[var(--gutter)] pt-28 pb-16 lg:h-full lg:w-[58vw] lg:justify-center lg:pb-0">
-            <p className="eyebrow mb-10">Selected work</p>
+            <p className="eyebrow mb-10">I — Selected work</p>
             <h2 className="text-[clamp(3rem,8vw,8.5rem)] leading-[0.88] font-light tracking-[-0.05em]">
               The
               <br />
